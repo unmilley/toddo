@@ -1,20 +1,45 @@
+// import { devServer } from './.temp/dev'
 const devServer = { https: true }
+
+import { pwa } from './src/pwa'
+import { config } from './src/runtimeConfig'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: false, telemetry: false },
-  modules: [['@nuxtjs/tailwindcss', { viewer: false }], '@pinia/nuxt'],
+  devtools: { enabled: true, telemetry: false, timeline: { enabled: false } },
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', '@vueuse/nuxt', '@nuxtjs/color-mode', '@vee-validate/nuxt'],
+  tailwindcss: {
+    cssPath: ['@/assets/css/tailwind.css', { injectPosition: 'first' }],
+    configPath: '@/tailwind.config.ts',
+    viewer: false,
+  },
+  colorMode: {
+    preference: 'system',
+    fallback: 'dark',
+    classSuffix: '',
+    dataValue: 'theme',
+    storageKey: 'theme',
+  },
+  icon: {
+    collections: ['bx', 'bxs'],
+    mode: 'svg',
+  },
+
+  vite: { optimizeDeps: { exclude: ['vee-validate'] } },
+
+  app: {
+    head: {
+      htmlAttrs: { dir: 'ltr', lang: 'ru' },
+      link: [...pwa.link],
+      meta: [...pwa.meta],
+    },
+  },
 
   runtimeConfig: {
-    firebase: {
-      API_KEY: process.env.API_KEY,
-      AUTH_DOMAIN: process.env.AUTH_DOMAIN,
-      DATABASE_URL: process.env.DATABASE_URL,
-      PROJECT_ID: process.env.PROJECT_ID,
-      STORAGE_BUCKET: process.env.STORAGE_BUCKET,
-      MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
-      APP_ID: process.env.APP_ID,
+    public: {
+      fb: { ...config.public },
     },
+    fbAdmin: { ...config.server },
   },
 
   devServer,
