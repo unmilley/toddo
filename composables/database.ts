@@ -49,6 +49,7 @@ export const useDatabase = () => {
   const deleteGroup = async (group: string | string[]) => {
     if (!user.value) return
     await remove(ref(db, `users/${user.value.uid}/${group}`))
+    await checkUserInDB()
   }
 
   const updateGroup = async (group: string, newGroup: string) => {
@@ -59,7 +60,6 @@ export const useDatabase = () => {
       if (data.exists()) {
         await set(ref(db, `/users/${user.value.uid}/${newGroup}`), data.val())
         await deleteGroup(group)
-        await checkUserInDB()
       }
     } catch (error) {
       console.log('error: ', error)

@@ -9,7 +9,6 @@
         auto-focus
         :args="{ autocomplete: 'off' }"
       />
-      <pre>meta: {{ meta }}</pre>
     </template>
 
     <template #buttons>

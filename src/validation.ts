@@ -26,11 +26,26 @@ export const RegisterSchema = toTypedSchema(
   })
 )
 
+export const CreateGroupSchema = toTypedSchema(
+  z.object({
+    new: z
+      .string({ message: 'Field is required' })
+      .min(1, 'Field is required')
+      .max(20, 'Maximum length - 20 characters')
+      .trim()
+      .refine((val) => {
+        const regex = /^[^.#$[\]]*$/
+        return regex.test(val)
+      }, 'Input cannot contain ".", "#", "$", "[", or "]".'),
+  })
+)
+
 export const RenameGroupSchema = toTypedSchema(
   z.object({
     new: z
       .string({ message: 'Field is required' })
       .min(1, 'Field is required')
+      .max(20, 'Maximum length - 20 characters')
       .trim()
       .refine((val) => {
         const regex = /^[^.#$[\]]*$/
