@@ -53,3 +53,22 @@ export const RenameGroupSchema = toTypedSchema(
       }, 'Input cannot contain ".", "#", "$", "[", or "]".'),
   })
 )
+
+export const CreateTaskSchema = toTypedSchema(
+  z.object({
+    task: z
+      .string({ message: 'Field is required' })
+      .min(1, 'Field is required')
+      .max(120, 'Maximum length - 120 characters'),
+  })
+)
+
+export const EditTaskSchema = toTypedSchema(
+  z.object({
+    editTask: z
+      .string({ message: 'Field is required' })
+      .min(1, 'Field is required')
+      .max(120, 'Maximum length - 120 characters')
+      .trim(),
+  })
+)

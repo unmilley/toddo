@@ -1,13 +1,5 @@
 import { child, get, getDatabase, push, ref, remove, set, update } from 'firebase/database'
-
-export interface Todo {
-  task: string
-  create_at: Date
-  isDone: boolean
-}
-export interface GroupTodo {
-  [key: string]: Todo
-}
+import type { Database } from '~/types'
 
 export const useDatabase = () => {
   useFirebase()
@@ -15,7 +7,7 @@ export const useDatabase = () => {
   const { user } = useAuth()
   const db = getDatabase()
 
-  const todo = useState<GroupTodo | null>('todo', () => null)
+  const todo = useState<Database.Group | null>('todo', () => null)
 
   const checkUserInDB = async () => {
     if (!user.value) return
@@ -36,17 +28,32 @@ export const useDatabase = () => {
     await update(child(ref(db), `users/${user.value.uid}/${group}/${id}`), { isDone })
   }
 
-  const updateTask = async (group: string, id: number | string, newTask: string) => {
-    if (!user.value) return
+  const updateTask = async (group: string, id: string, newTask: string) => {
+    if (!todo.value || !user.value) return
     await update(child(ref(db), `users/${user.value.uid}/${group}/${id}`), { task: newTask })
+    todo.value[group][id].task = newTask
   }
 
-  const deleteTask = async (group: string | string[], id: number | string) => {
-    if (!user.value) return
+  const deleteTask = async (group: string, id: string) => {
+    if (!todo.value || !user.value) return
     await remove(ref(db, `users/${user.value.uid}/${group}/${id}`))
+    delete todo.value[group][id]
   }
 
-  const deleteGroup = async (group: string | string[]) => {
+  const deleteAllCompletedTasks = async (groupId: string, ids: string[]) => {
+    if (!todo.value || !user.value) return
+
+    const group = todo.value[groupId]
+
+    ids.forEach(async (id) => {
+      if (!user.value) return
+      await remove(ref(db, `users/${user.value.uid}/${groupId}/${id}`))
+      delete group[id]
+    })
+    todo.value[groupId] = group
+  }
+
+  const deleteGroup = async (group: string) => {
     if (!user.value) return
     await remove(ref(db, `users/${user.value.uid}/${group}`))
     await checkUserInDB()
@@ -67,14 +74,28 @@ export const useDatabase = () => {
   }
 
   const addTask = async (group: string, task: string) => {
-    if (!user.value) return
-    const res = await push(ref(db, `users/${user.value.uid}/${group}`), {
+    if (!user.value || !todo.value) return
+    const object: Database.Todo = {
       task,
       isDone: false,
       create_at: Number(new Date()),
-    })
-    return res
+    }
+    const res = await push(ref(db, `users/${user.value.uid}/${group}`), object)
+    const key = res.key
+    if (!key) return
+
+    todo.value[group][key] = object
   }
 
-  return { todo, checkUserInDB, switchDone, updateTask, deleteTask, deleteGroup, addTask, updateGroup }
+  return {
+    todo,
+    checkUserInDB,
+    switchDone,
+    updateTask,
+    deleteTask,
+    deleteGroup,
+    addTask,
+    updateGroup,
+    deleteAllCompletedTasks,
+  }
 }
