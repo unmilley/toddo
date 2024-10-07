@@ -39,14 +39,14 @@ type ModalProps = {
   }
 }
 
-const { title, buttons } = withDefaults(defineProps<ModalProps>(), {
+const props = withDefaults(defineProps<ModalProps>(), {
   header: true,
   buttons: () => ({
     enabled: true,
     position: 'right',
   }),
 })
-const isButtonsEnabled = computed(() => (typeof buttons.enabled === 'undefined' ? true : buttons.enabled))
+const isButtonsEnabled = computed(() => (typeof props.buttons.enabled === 'undefined' ? true : props.buttons.enabled))
 
 const buttonPosition = computed(() => {
   const positionClasses = {
@@ -56,10 +56,10 @@ const buttonPosition = computed(() => {
     between: 'justify-between',
   }
 
-  return positionClasses[buttons.position ?? 'right']
+  return positionClasses[props.buttons.position ?? 'right']
 })
 
-const { open, close, toggle, visible } = useModal(title)
+const { open, close, toggle, visible } = useModal(props.title)
 
 const emit = defineEmits<{
   closed: []
