@@ -16,7 +16,7 @@
         </div>
         <!--  -->
         <div class="overflow-x-auto">
-          <table class="table" v-if="todos.length">
+          <table class="table" v-if="groups.length">
             <thead>
               <tr>
                 <th></th>
@@ -28,7 +28,7 @@
             </thead>
             <tbody>
               <tr
-                v-for="(t, idx) in todos"
+                v-for="(t, idx) in groups"
                 :key="t.title"
                 @click="navigateTo(`/todo/${t.title}`)"
                 class="hover group cursor-pointer"
@@ -54,7 +54,7 @@
                 </td>
               </tr>
             </tbody>
-            <tfoot v-if="todos.length >= 10">
+            <tfoot v-if="groups.length >= 10">
               <tr>
                 <th></th>
                 <th>Title</th>
@@ -64,7 +64,7 @@
               </tr>
             </tfoot>
           </table>
-          <p :class="{ invisible: todos.length }">
+          <p :class="{ invisible: groups.length }">
             The group “{{ searchTerm }}” was not found, but you can
             <button class="btn-link" @click="createGroup(searchTerm)">create it</button>
           </p>
@@ -80,6 +80,7 @@
 
 <script setup lang="ts">
 import type { DefineComponent } from 'vue'
+import type { Database } from '~/types'
 
 definePageMeta({
   middleware: 'auth',
@@ -110,14 +111,12 @@ const createGroup = (title: string = '') => {
   createGroupComponent.value.openModal(title, Object.keys(todo.value))
 }
 
-type Todos = { title: string; todo: globalThis.Todo; completed: number; total: number }[]
-
-const todos = computed(() => {
+const groups = computed(() => {
   if (!todo.value) return []
 
   const term = searchTerm.value.toLowerCase()
 
-  return Object.entries(todo.value).reduce<Todos>((acc, [title, tasks]) => {
+  return Object.entries(todo.value).reduce<Database.Groups[]>((acc, [title, tasks]) => {
     const totalCount = Object.keys(tasks).length // Количество задач
     const completedCount = Object.values(tasks).filter(({ isDone }) => isDone).length // Завершенные задачи
 
@@ -125,7 +124,7 @@ const todos = computed(() => {
     if (title.toLowerCase().includes(term)) {
       acc.push({
         title,
-        todo: tasks,
+        tasks: tasks,
         completed: completedCount,
         total: totalCount,
       })
@@ -135,7 +134,7 @@ const todos = computed(() => {
   }, [])
 })
 
-// const todos = computed(() => {
+// const groups = computed(() => {
 //   if (!todo.value) return []
 //   const term = searchTerm.value.toLowerCase()
 

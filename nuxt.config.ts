@@ -43,4 +43,5 @@ export default defineNuxtConfig({
   },
 
   devServer,
+  ssr: false,
 })
