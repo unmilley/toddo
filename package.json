@@ -1,6 +1,6 @@
 {
-  "name": "toddo.v2",
-  "private": true,
+  "name": "toddo",
+  "version": "3.1.1",
   "type": "module",
   "scripts": {
     "dev": "nuxt dev",
@@ -10,28 +10,55 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@vee-validate/nuxt": "^4.13.2",
-    "@vee-validate/zod": "^4.13.2",
-    "@vueuse/router": "^11.1.0",
-    "firebase": "^10.12.5",
-    "firebase-admin": "^12.3.1",
-    "nuxt": "^3.13.0",
-    "vee-validate": "^4.13.2",
-    "vue": "latest",
-    "vue-router": "latest",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@nuxtjs/seo": "2.0.2",
+    "@vee-validate/nuxt": "^4.14.7",
+    "@vee-validate/zod": "^4.14.7",
+    "@vuepic/vue-datepicker": "^10.0.0",
+    "@vueuse/router": "^12.0.0",
+    "defu": "^6.1.4",
+    "firebase": "^11.0.2",
+    "firebase-admin": "^13.0.1",
+    "fuse.js": "^7.0.0",
+    "nuxt": "^3.14.1592",
+    "slugify": "^1.6.6",
+    "vee-validate": "^4.14.7",
+    "vue": "^3.5.13",
+    "vue-draggable-plus": "^0.6.0",
+    "vue-router": "^4.5.0",
+    "vue-sonner": "^1.3.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@iconify-json/bx": "^1.2.0",
-    "@nuxt/icon": "^1.5.4",
-    "@nuxtjs/color-mode": "^3.5.1",
-    "@nuxtjs/tailwindcss": "^6.12.1",
-    "@pinia/nuxt": "^0.5.5",
-    "@vueuse/core": "^11.1.0",
-    "@vueuse/nuxt": "^11.1.0",
-    "daisyui": "^4.12.12",
-    "pinia": "^2.2.4",
-    "tailwindcss": "^3.4.13"
+    "@iconify-json/bx": "^1.2.1",
+    "@iconify-json/bxs": "^1.2.1",
+    "@nuxt/icon": "^1.9.0",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "@pinia/nuxt": "^0.8.0",
+    "@vueuse/core": "^12.0.0",
+    "@vueuse/nuxt": "^12.0.0",
+    "daisyui": "^4.12.14",
+    "pinia": "^2.2.8",
+    "punycode": "^2.3.1",
+    "tailwindcss": "^3.4.15"
   },
-  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "email": "hello@milley.uno",
+    "name": "Alexandr Lyadov"
+  },
+  "description": "Universal todo list with Nuxt & Firebase",
+  "homepage": "https://toddo.milley.uno/",
+  "repository": {
+    "url": "https://github.com/unmilley/toddo"
+  },
+  "keywords": [
+    "Nuxt",
+    "Firebase",
+    "Firestore",
+    "Todo"
+  ],
+  "packageManager": "pnpm@9.14.2"
 }
