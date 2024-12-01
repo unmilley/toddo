@@ -1,20 +1,24 @@
 <template>
-  <section>
+  <section class="flex flex-col items-start bg-base-100 p-2 h-[calc(100%-2.9rem)] relative rounded-t-box">
     <ClientOnly>
-      <div v-if="isLoggedIn" class="flex justify-center items-center h-screen">
-        <nuxt-link to="/todo" class="btn btn-secondary btn-outline btn-lg group">
-          Toddo
-          <Icon name="bx-chevron-right" class="group-hover:hidden" />
-          <Icon name="bx-chevrons-right" class="hidden group-hover:inline-block" />
-        </nuxt-link>
+      <div v-if="isUser" class="">
+        <pre>user: {{ user }}</pre>
       </div>
-      <Auth v-else />
+      <div v-else class="">
+        <div class="w-full p-1">
+          <Hero />
+        </div>
+      </div>
+
+      <template #fallback>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Icon name="bx:loader-alt" class="animate-spin text-primary" size="3rem" />
+        </div>
+      </template>
     </ClientOnly>
   </section>
 </template>
 
-<script lang="ts" setup>
-const { isLoggedIn } = useUnState()
-
-whenever(isLoggedIn, () => navigateTo('/todo'))
+<script setup lang="ts">
+const { user, isUser } = useAuth()
 </script>
