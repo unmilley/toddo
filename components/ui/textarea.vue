@@ -1,6 +1,6 @@
 <template>
   <div class="form-control relative">
-    <label class="label">
+    <label v-if="label || label !== ''" class="label">
       <span class="label-text">{{ label ?? name }}</span>
       <slot name="label" />
     </label>
@@ -12,8 +12,9 @@
       :placeholder="placeholder ?? name"
       v-bind="args"
       @blur="setTouched(true)"
+      @focus="setTouched(true)"
     />
-    <label class="label">
+    <label class="label" v-if="!withoutError">
       <span class="label-text-alt text-left text-error" v-show="isError" v-html="errorMessage" />
     </label>
     <slot name="default" />
@@ -22,7 +23,7 @@
 
 <script setup lang="ts">
 import { useField } from 'vee-validate'
-import type { InputHTMLAttributes, InputTypeHTMLAttribute } from 'vue'
+import type { InputTypeHTMLAttribute, TextareaHTMLAttributes } from 'vue'
 
 const props = defineProps<{
   name: string
@@ -30,8 +31,9 @@ const props = defineProps<{
   label?: string
   placeholder?: string
   inputClass?: string
-  args?: InputHTMLAttributes
+  args?: TextareaHTMLAttributes
   autoFocus?: boolean
+  withoutError?: boolean
 }>()
 
 // const textarea = ref<HTMLTextAreaElement | null>(null)

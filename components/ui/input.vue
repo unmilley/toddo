@@ -14,7 +14,7 @@
       v-bind="args"
       @blur="setTouched(true)"
     />
-    <label class="label">
+    <label class="label" v-if="!withoutError">
       <span class="label-text-alt text-left text-error" v-show="isError" v-html="errorMessage" />
     </label>
     <slot name="default" />
@@ -33,6 +33,7 @@ const props = defineProps<{
   inputClass?: string
   args?: InputHTMLAttributes
   autoFocus?: boolean
+  withoutError?: boolean
 }>()
 
 const input = ref<HTMLInputElement | null>(null)
