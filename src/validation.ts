@@ -25,18 +25,21 @@ export const RegisterSchema = toTypedSchema(
       .min(6, 'Your password must have <strong>6</strong> characters or more.'),
   })
 )
-
-export const CreateGroupSchema = toTypedSchema(
+const reservedTitles = ['collections', 'api']
+export const ProjectSchema = toTypedSchema(
   z.object({
-    new: z
+    newProject: z
       .string({ message: 'Field is required' })
       .min(1, 'Field is required')
-      .max(20, 'Maximum length - 20 characters')
+      .max(20, 'Maximum length - <strong>20</strong> characters')
       .trim()
       .refine((val) => {
-        const regex = /^[^.#$[\]]*$/
+        const regex = /^[^$%]*$/
         return regex.test(val)
-      }, 'Input cannot contain ".", "#", "$", "[", or "]".'),
+      }, 'Input cannot contain "$" or "%"')
+      .refine((val) => {
+        return !reservedTitles.includes(val.toLowerCase())
+      }, '“Collections” reserved by the system'),
   })
 )
 
@@ -48,9 +51,9 @@ export const RenameGroupSchema = toTypedSchema(
       .max(20, 'Maximum length - 20 characters')
       .trim()
       .refine((val) => {
-        const regex = /^[^.#$[\]]*$/
+        const regex = /^[^.#/$[\]]*$/
         return regex.test(val)
-      }, 'Input cannot contain ".", "#", "$", "[", or "]".'),
+      }, 'Input cannot contain ".", "#", "/", "$", "[", or "]".'),
   })
 )
 
