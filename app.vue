@@ -1,10 +1,22 @@
 <template>
-  <div class="container mx-auto">
+  <div>
     <NuxtRouteAnnouncer>
       <template #default="{ message }">
         <p>{{ message }} was loaded.</p>
       </template>
     </NuxtRouteAnnouncer>
+    <ClientOnly>
+      <Toaster
+        position="top-right"
+        :duration="4e3"
+        :theme="($colorMode.value as Theme)"
+        offset="17px"
+        :visibleToasts="5"
+        closeButton
+      />
+    </ClientOnly>
+    <NuxtLoadingIndicator color="repeating-linear-gradient(to right, oklch(var(--bc)) 0%, oklch(var(--p)) 100%)" />
+    <!-- <NuxtLoadingIndicator color="repeating-linear-gradient(to right,#00dc82 0%,#34cdfe 50%,#0047e1 100%)" /> -->
     <NuxtLayout>
       <NuxtPage
         :transition="{
@@ -17,6 +29,9 @@
 </template>
 
 <script lang="ts" setup>
+import { Toaster } from 'vue-sonner'
+type Theme = 'light' | 'dark'
+
 useHead({
   titleTemplate: (titleChunk) => (titleChunk ? `${titleChunk} · Toddo` : 'Toddo'),
 })
@@ -31,7 +46,6 @@ if (import.meta.server) {
   watchImmediate(user, (newValue) => {
     isLoggedIn.value = newValue ? true : false
   })
-  whenever(user, (val) => console.log(val))
 }
 </script>
 
@@ -48,7 +62,7 @@ if (import.meta.server) {
 
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.4s;
+  transition: all 0.2s;
 }
 .page-enter-from,
 .page-leave-to {
