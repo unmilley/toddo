@@ -1,27 +1,36 @@
 <template>
-  <footer
-    class="flex justify-between items-center w-full text-sm p-2 bg-base-100 fixed bottom-0 rounded-b-box ~md:rounded-br-none"
-  >
-    <div class="flex items-center ~w-full md:flex-row flex-col w-max">
-      <p class="flex items-center gap-0.5">
-        <span>Made with</span>
-        <Icon name="bxs:heart" size="1rem" class="text-primary" />
-        <span>and</span>
-        <Icon name="bx:coffee-togo" size="1rem" class="text-primary" />
-      </p>
-      <div class="divider divider-vertical md:divider-horizontal !m-0"></div>
-      <p>
-        © {{ new Date().getFullYear() }} ─
-        <NuxtLink class="link" to="https://github.com/unmilley/toddo/blob/master/LICENSE" target="_blank"
-          >MIT License</NuxtLink
-        >
-      </p>
+  <footer class="bg-base-100 rounded-b-box border-t border-base-content/10">
+    <div class="justify-start w-3/4">
+      <div class="flex items-center md:flex-row flex-col">
+        <p class="flex items-center gap-0.5">
+          <span>Made with</span>
+          <Icon name="bxs:heart" size="1rem" class="text-primary" />
+          <span>and</span>
+          <Icon name="bx:coffee-togo" size="1rem" class="text-primary" />
+        </p>
+        <div class="divider divider-vertical md:divider-horizontal !m-0"></div>
+        <p>
+          © {{ new Date().getFullYear() }} ─
+          <NuxtLink class="link" to="https://github.com/unmilley/toddo/blob/master/LICENSE" target="_blank"
+            >MIT License</NuxtLink
+          >
+        </p>
+      </div>
     </div>
-    <NuxtLink to="https://milley.uno" target="_blank" class="btn btn-sm border-base-content">
-      <Icon name="bxs:cookie" size="1.25rem" />
-      <span>Milley</span>
-    </NuxtLink>
+    <div class="justify-end w-1/4">
+      <NuxtLink to="https://milley.uno" target="_blank" class="btn btn-sm border-base-content">
+        <Icon name="bxs:cookie" size="1.25rem" />
+        <!-- <span>Milley</span> -->
+      </NuxtLink>
+    </div>
   </footer>
 </template>
 
-<script lang="ts" setup></script>
+<style lang="css" scoped>
+footer {
+  @apply flex items-center p-2 min-h-16 w-full;
+  & > * {
+    @apply inline-flex items-center;
+  }
+}
+</style>

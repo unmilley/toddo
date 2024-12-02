@@ -1,5 +1,7 @@
 <template>
-  <section class="flex flex-col items-start bg-base-100 p-2 h-[calc(100%-2.9rem)] relative rounded-t-box">
+  <section
+    class="flex flex-col items-start bg-base-100 p-2 h-[calc(100dvh-8rem)] overflow-x-hidden relative rounded-t-box"
+  >
     <ClientOnly>
       <div v-if="isUser" class="">
         <pre>user: {{ user }}</pre>

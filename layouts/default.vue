@@ -1,9 +1,9 @@
 <template>
   <div class="drawer md:drawer-open">
     <input id="drawer" type="checkbox" class="drawer-toggle" v-model="isDrawerOpen" />
-    <div class="drawer-content flex flex-col">
+    <div class="drawer-content w-full flex flex-col">
       <LayoutNavbar v-model="isDrawerOpen" />
-      <main class="bg-base-300 relative h-[calc(100dvh-5.6rem)] md:h-[calc(100dvh-4.1rem)]">
+      <main class="">
         <slot />
       </main>
       <LayoutFooter />
