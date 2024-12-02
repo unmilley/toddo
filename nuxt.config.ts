@@ -47,8 +47,8 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { dir: 'ltr', lang: 'ru' },
       titleTemplate: '%s %separator %siteName',
-      link: [...pwa.link],
-      meta: [...pwa.meta],
+      link: pwa.link,
+      meta: pwa.meta,
     },
   },
 
