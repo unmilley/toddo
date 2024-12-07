@@ -1,97 +1,56 @@
 <template>
-  <div v-if="isAsideFull">
-    <ClientOnly>
-      <div class="alert shadow-lg" v-if="user">
-        <div class="avatar" v-if="user.photoURL">
-          <div class="w-12 rounded-full">
-            <img :src="user.photoURL" alt="" />
+  <div class="flex shrink-0 items-center pl-5 w-full h-16 bg-base-100 rounded-xl" v-if="user">
+    <div class="flex gap-4 items-center w-full">
+      <div class="relative size-9 flex items-center justify-center">
+        <details class="dropdown dropdown-top" ref="details">
+          <summary class="btn btn-circle btn-ghost btn-outline">
+            <div class="avatar">
+              <div class="w-10 rounded-full" v-if="user.photoURL">
+                <img :src="user.photoURL" :alt="user.displayName ?? ''" />
+              </div>
+            </div>
+          </summary>
+          <div class="dropdown-content z-[1] card card-compact bg-base-100 w-60 shadow-xl">
+            <div class="card-body">
+              <h2 class="card-title">{{ user.displayName }}</h2>
+              <ul class="menu bg-base-100 rounded-box shadow">
+                <li><a @click="logout()">Logout</a></li>
+              </ul>
+            </div>
           </div>
-        </div>
-
-        <div>
-          <h3 class="font-bold">{{ user.displayName }}</h3>
-          <p
-            class="text-xs"
-            :class="{ 'underline decoration-error underline-offset-2 decoration-wavy': !user.emailVerified }"
-          >
-            {{ user.email }}
-          </p>
-        </div>
-        <div class="tooltip tooltip-top" data-tip="Logout">
-          <button @click="logout" class="btn btn-neutral btn-outline btn-square btn-sm">
-            <Icon name="bx:log-out" />
-          </button>
-        </div>
+        </details>
       </div>
-
-      <template #fallback>
-        <div class="alert shadow-lg">
-          <div class="flex items-center gap-4">
-            <div class="skeleton size-12 shrink-0 rounded-full"></div>
-            <div class="flex flex-col gap-4">
-              <div class="skeleton h-4 w-20"></div>
-              <div class="skeleton h-4 w-28"></div>
-            </div>
-          </div>
-          <div class="skeleton rounded-btn ml-auto size-8"></div>
-        </div>
-      </template>
-    </ClientOnly>
-  </div>
-  <div v-else>
-    <ClientOnly>
-      <details ref="dropdown" class="dropdown dropdown-right dropdown-end">
-        <summary class="btn btn-circle bg-base-100">
-          <div class="avatar" v-if="user && user.photoURL">
-            <div class="w-11 rounded-full" v-if="user.photoURL">
-              <img :src="user.photoURL" alt="" />
-            </div>
-            <div v-else>
-              <Icon name="bx:user-circle" size="2.4rem" />
-            </div>
-          </div>
-        </summary>
-        <div class="dropdown-content alert ml-4 min-w-60 w-max max-w-80 bg-base-300" v-if="user">
-          <div>
-            <h3 class="font-bold">{{ user.displayName }}</h3>
-            <p
-              class="text-xs"
-              :class="{ 'underline decoration-error underline-offset-2 decoration-wavy': !user.emailVerified }"
-            >
-              {{ user.email }}
-            </p>
-          </div>
-          <div class="tooltip tooltip-top" data-tip="Logout">
-            <button @click="logout" class="btn btn-neutral btn-outline btn-square btn-sm">
-              <Icon name="bx:log-out" />
-            </button>
-          </div>
-        </div>
-      </details>
-
-      <template #fallback>
-        <summary class="btn btn-circle bg-base-100">
-          <div class="avatar">
-            <div><Icon name="bx:user-circle" size="2.4rem" /></div>
-          </div>
-        </summary>
-      </template>
-    </ClientOnly>
+      <div
+        class="flex flex-col gap-1 grow min-w-0 h-fit transition-opacity"
+        :class="[isAsideFull ? 'opacity-100' : 'opacity-0']"
+      >
+        <div class="truncate block text-sm" :title="user.displayName ?? ''">{{ user.displayName }}</div>
+        <p
+          class="text-xs decoration-error underline-offset-2 decoration-wavy"
+          :class="{ 'underline ': !user.emailVerified }"
+          :title="user.email"
+          v-if="user.email"
+        >
+          {{ truncateEmail(user.email) }}
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-withDefaults(defineProps<{ isAsideFull?: boolean }>(), { isAsideFull: false })
+defineProps<{ isAsideFull: boolean }>()
 const { user, logout } = useAuth()
-</script>
 
-<style scoped>
-@media (max-width: 640px) {
-  .alert {
-    grid-auto-flow: column;
-    grid-template-columns: auto minmax(auto, 1fr);
-    justify-items: start;
-    text-align: start;
-  }
+const details = ref<HTMLDetailsElement>()
+onClickOutside(details, () => (details.value!.open = false))
+
+const truncateEmail = (email: string) => {
+  const [title, mail] = email.split('@')
+
+  if (!mail || title.length <= 10) return email
+
+  const halfLength = Math.floor(title.length / 2)
+  return `${title.slice(0, halfLength)}...@${mail}`
 }
-</style>
+</script>

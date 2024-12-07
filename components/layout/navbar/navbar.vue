@@ -1,31 +1,23 @@
 <template>
-  <div class="navbar bg-base-300 w-full">
-    <div class="navbar-start md:invisible">
-      <button type="button" aria-label="open sidebar" class="btn btn-square" @click="isDrawerOpen = !isDrawerOpen">
-        <Icon name="bx:menu" size="1.75rem" />
+  <header class="[grid-area:_navbar] navbar bg-base-100 rounded-xl mb-3">
+    <div class="navbar-start">
+      <label class="btn btn-square swap hidden md:inline-grid">
+        <input type="checkbox" v-model="ls.isAsideFull" />
+        <Icon name="t:left-panel-open" size="1.5rem" class="swap-off" />
+        <Icon name="t:left-panel-close" size="1.5rem" class="swap-on" />
+      </label>
+      <button class="btn btn-square inline-grid md:hidden" @click="$emit('menu')">
+        <Icon name="bx:menu" size="1.5rem" />
       </button>
     </div>
-    <div class="navbar-center flex items-center md:invisible">
-      <nuxt-link to="/" class="btn btn-ghost text-xl" v-if="!title">
-        <Icon name="bx:book-heart" size="1.5rem" />
-        Toddo
-      </nuxt-link>
-      <h1 v-else class="text-xl font-bold">{{ title }}</h1>
-    </div>
+    <div class="navbar-center"></div>
     <div class="navbar-end">
-      <LayoutNavbarTheme />
+      <layout-navbar-theme />
     </div>
-  </div>
+  </header>
 </template>
 
 <script lang="ts" setup>
-const isDrawerOpen = defineModel<boolean>({ required: true })
-const Group = useRouteParams('group', '', { transform: String })
-const Author = useRouteParams('author', '', { transform: String })
-
-const { localData } = useUnState()
-const title = computed(() => {
-  if (!Group.value || !Author.value || !localData.value.projects.length) return
-  return localData.value.projects.find(({ path }) => path === `${Author.value}@${Group.value}`)?.title
-})
+defineEmits<{ menu: [] }>()
+const { localSetting: ls } = useUnState()
 </script>

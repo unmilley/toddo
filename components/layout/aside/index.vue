@@ -1,39 +1,36 @@
 <template>
-  <div class="bg-base-300 h-full relative w-2" :class="ls.isAsideFull ? 'w-80' : '!w-20 flex flex-col items-center'">
-    <div class="flex items-center h-16" :class="{ 'pl-2': ls.isAsideFull }">
-      <nuxt-link to="/" class="btn btn-ghost text-lg flex md:hidden">
-        <Icon name="bx:book-heart" size="1.4rem" />
-        Toddo
-      </nuxt-link>
-      <label class="btn btn-square swap hidden md:inline-grid">
-        <input type="checkbox" v-model="ls.isAsideFull" />
-        <Icon name="t:left-panel-open" size="1.5rem" class="swap-off" />
-        <Icon name="t:left-panel-close" size="1.5rem" class="swap-on" />
-      </label>
-    </div>
-    <div class="p-4 pt-0 max-h-[calc(100dvh-11rem)]" v-if="ls.isAsideFull">
-      <LayoutAsideProjects />
-    </div>
-    <Teleport to="#teleports">
-      <div class="fixed top-16 left-4" v-if="!ls.isAsideFull">
-        <details ref="dropdown" class="dropdown dropdown-right">
-          <summary class="btn btn-square btn-outline">
-            <Icon name="bxs:parking" size="1.75rem" />
-          </summary>
+  <aside
+    class="[grid-area:_aside] flex flex-col items-center transition-all z-10 h-full md:relative md:translate-x-0 bg-base-300 fixed top-0 -translate-x-80"
+    :class="[ls.isAsideFull ? 'w-72' : 'w-[4.5rem]', { 'translate-x-[-0.5rem]': isOpen }]"
+  >
+    <div class="flex flex-col items-center w-full h-full p-2 md:p-0">
+      <div
+        class="flex items-center w-full h-16 relative transition-transform"
+        :class="{ 'translate-x-3': !ls.isAsideFull }"
+      >
+        <NuxtLink to="/" class="btn text-xl" :class="{ 'btn-square ': !ls.isAsideFull }">
+          <Icon name="t:logo" size="1.5rem" />
+          <span class="transition-opacity" v-show="ls.isAsideFull">Toddo</span>
+        </NuxtLink>
+      </div>
 
-          <LayoutAsideProjects class="dropdown-content ml-4" is-aside-full />
-        </details>
+      <div class="relative flex-grow w-full">
+        <layout-aside-projects :isAsideFull="ls.isAsideFull" />
       </div>
-    </Teleport>
-    <div class="fixed bottom-4 w-[calc(100%-1rem)] inset-x-2" v-if="ls.isAsideFull">
-      <UserProfile is-aside-full />
+      <UserProfile :isAsideFull="ls.isAsideFull" />
     </div>
-    <Teleport to="#teleports">
-      <div class="fixed bottom-4 left-4" v-if="!ls.isAsideFull">
-        <UserProfile />
-      </div>
+    <Teleport to="body">
+      <Transition name="page" mode="out-in">
+        <div
+          id="drawer-overlay"
+          aria-label="close sidebar"
+          class="fixed cursor-pointer transition duration-200 top-0 left-0 h-dvh w-full z-[1] bg-[#0006]"
+          v-if="isOpen"
+          @click="isOpen = false"
+        ></div>
+      </Transition>
     </Teleport>
-  </div>
+  </aside>
 </template>
 
 <script setup lang="ts">
@@ -43,6 +40,7 @@ watchImmediate(isMobile, (val) => {
   if (val) ls.value.isAsideFull = val
 })
 
-const dropdown = ref<HTMLDetailsElement>()
-onClickOutside(dropdown, () => (dropdown.value!.open = false))
+const isOpen = ref(false)
+
+defineExpose({ openDrawer: () => (isOpen.value = true) })
 </script>
